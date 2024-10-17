@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import axios from "axios";
 import { useRoute } from "@react-navigation/native";
-import ImageZoom from "react-native-image-pan-zoom";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -20,7 +19,7 @@ const ChapterScreen = () => {
 
 	const [pages, setPages] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [imageHeights, setImageHeights] = useState([]); // Store heights of images
+	const [imageHeights, setImageHeights] = useState([]);
 
 	useEffect(() => {
 		const fetchChapterPages = async () => {
@@ -37,7 +36,10 @@ const ChapterScreen = () => {
 				}));
 
 				setPages(imageUrls);
-				setImageHeights(new Array(imageUrls.length).fill(0)); // Initialize heights array
+				setImageHeights(new Array(imageUrls.length).fill(0));
+
+				// Preload images
+				preloadImages(imageUrls.map((image) => image.url));
 			} catch (error) {
 				console.error("Error fetching chapter pages:", error);
 			} finally {
@@ -48,16 +50,21 @@ const ChapterScreen = () => {
 		fetchChapterPages();
 	}, [chapterId]);
 
-	// Function to get image size
+	const preloadImages = (urls) => {
+		urls.forEach((url) => {
+			Image.prefetch(url); // Preload each image
+		});
+	};
+
 	const getImageSize = (url, index) => {
 		Image.getSize(
 			url,
 			(width, height) => {
 				const aspectRatio = width / height;
-				const newHeight = windowWidth / aspectRatio; // Maintain aspect ratio based on width
+				const newHeight = windowWidth / aspectRatio;
 				setImageHeights((prevHeights) => {
 					const newHeights = [...prevHeights];
-					newHeights[index] = newHeight; // Set height for this image
+					newHeights[index] = newHeight;
 					return newHeights;
 				});
 			},
@@ -67,7 +74,6 @@ const ChapterScreen = () => {
 		);
 	};
 
-	// After loading images, get their sizes
 	useEffect(() => {
 		if (pages.length) {
 			pages.forEach((item, index) => {
@@ -92,19 +98,11 @@ const ChapterScreen = () => {
 						style={[styles.pageContainer, { height: imageHeights[index] || 0 }]}
 						key={index}
 					>
-						<ImageZoom
-							cropWidth={windowWidth}
-							cropHeight={imageHeights[index] || 0} // Set dynamic crop height
-							imageWidth={windowWidth}
-							imageHeight={imageHeights[index] || 0} // Set dynamic image height
-							enableSwipeDown={false}
-						>
-							<Image
-								source={{ uri: item.url }}
-								style={styles.pageImage}
-								resizeMode="contain" // Keep aspect ratio
-							/>
-						</ImageZoom>
+						<Image
+							source={{ uri: item.url }}
+							style={styles.pageImage}
+							resizeMode="contain" // Keep aspect ratio
+						/>
 					</View>
 				))}
 			</ScrollView>
@@ -129,8 +127,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	pageImage: {
-		width: "100%", // Ensure the image fills the width of the screen
-		height: "100%", // Set height to 100% to fill the height of the container
+		width: "100%",
+		height: "100%",
 	},
 });
 

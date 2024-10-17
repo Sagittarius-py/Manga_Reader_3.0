@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Manga_Reader_3.0",
-    "slug": "Manga_Reader_3.0",
+    "slug": "manga-reader-30",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -31,6 +31,18 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2e97a1d7-3230-48ee-a38a-e1fa8a434a33"
+      }
+    },
+    "owner": "sieniu2791",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/2e97a1d7-3230-48ee-a38a-e1fa8a434a33"
     }
   }
 }

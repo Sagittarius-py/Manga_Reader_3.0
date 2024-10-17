@@ -199,6 +199,10 @@ const StackNavigator = () => {
 				headerStyle: {
 					backgroundColor: currentTheme.background,
 				},
+				headerTitleStyle: {
+					fontWeight: "bold",
+					color: colors.accent,
+				},
 				headerTintColor: currentTheme.text,
 			})}
 		>
@@ -209,9 +213,11 @@ const StackNavigator = () => {
 					headerStyle: {
 						backgroundColor: currentTheme.cardBackground,
 					},
+
 					headerTintColor: "#fff",
 					headerTitleStyle: {
 						fontWeight: "bold",
+						color: colors.accent,
 					},
 				}}
 				component={MangaListScreen}
