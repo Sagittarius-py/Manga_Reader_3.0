@@ -4,13 +4,22 @@ import {
 	StyleSheet,
 	ActivityIndicator,
 	Dimensions,
-	ScrollView,
+	FlatList, // Replaced ScrollView with FlatList
 	Image,
 } from "react-native";
 import axios from "axios";
 import { useRoute } from "@react-navigation/native";
+import ImageZoom from "react-native-image-pan-zoom";
 
 const windowWidth = Dimensions.get("window").width;
+
+async function getSizes(item) {
+    try {
+        var sizes = await Image.getSize(item.url, (width, height) => { return ({width, height})});
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 const ChapterScreen = () => {
 	const route = useRoute();
@@ -19,8 +28,6 @@ const ChapterScreen = () => {
 
 	const [pages, setPages] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [imageHeights, setImageHeights] = useState([]);
-
 	useEffect(() => {
 		const fetchChapterPages = async () => {
 			try {
@@ -36,10 +43,6 @@ const ChapterScreen = () => {
 				}));
 
 				setPages(imageUrls);
-				setImageHeights(new Array(imageUrls.length).fill(0));
-
-				// Preload images
-				preloadImages(imageUrls.map((image) => image.url));
 			} catch (error) {
 				console.error("Error fetching chapter pages:", error);
 			} finally {
@@ -50,37 +53,28 @@ const ChapterScreen = () => {
 		fetchChapterPages();
 	}, [chapterId]);
 
-	const preloadImages = (urls) => {
-		urls.forEach((url) => {
-			Image.prefetch(url); // Preload each image
-		});
-	};
+	const renderItem = ({ item, index }) => {
 
-	const getImageSize = (url, index) => {
-		Image.getSize(
-			url,
-			(width, height) => {
-				const aspectRatio = width / height;
-				const newHeight = windowWidth / aspectRatio;
-				setImageHeights((prevHeights) => {
-					const newHeights = [...prevHeights];
-					newHeights[index] = newHeight;
-					return newHeights;
-				});
-			},
-			(error) => {
-				console.error("Error getting image size:", error);
-			}
+        var sizes = getSizes(item)
+        console.log(sizes)
+
+		return (
+			<View style={[styles.pageContainer]}>
+				<ImageZoom
+					imageWidth={Dimensions.get("window").width}
+					cropWidth={Dimensions.get("window").width}
+					cropHeight={Dimensions.get("window").height}
+				>
+					<Image
+						source={{ uri: item.url }}
+						style={styles.pageImage}
+						resizeMethode="scale"
+						resizeMode="contain"// Keep aspect ratio, enables some caching
+					/>
+				</ImageZoom>
+			</View>
 		);
 	};
-
-	useEffect(() => {
-		if (pages.length) {
-			pages.forEach((item, index) => {
-				getImageSize(item.url, index);
-			});
-		}
-	}, [pages]);
 
 	if (loading) {
 		return (
@@ -92,39 +86,25 @@ const ChapterScreen = () => {
 
 	return (
 		<View style={styles.container}>
-			<ScrollView showsVerticalScrollIndicator={false}>
-				{pages.map((item, index) => (
-					<View
-						style={[styles.pageContainer, { height: imageHeights[index] || 0 }]}
-						key={index}
-					>
-						<Image
-							source={{ uri: item.url }}
-							style={styles.pageImage}
-							resizeMode="contain" // Keep aspect ratio
-						/>
-					</View>
-				))}
-			</ScrollView>
+			<FlatList
+				data={pages}
+				renderItem={renderItem}
+				keyExtractor={(item, index) => index.toString()}
+				showsVerticalScrollIndicator={false}
+				initialNumToRender={5} // Lazy loading, adjust as needed
+				maxToRenderPerBatch={4}
+				windowSize={7}
+			/>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
 		backgroundColor: "#1c1d22",
 	},
 	loadingContainer: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "#1c1d22",
-	},
-	pageContainer: {
-		width: windowWidth,
-		justifyContent: "center",
-		alignItems: "center",
+		backgroundColor: "#1c1d22"
 	},
 	pageImage: {
 		width: "100%",
