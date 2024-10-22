@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
     View,
     StyleSheet,
@@ -6,23 +6,22 @@ import {
     Dimensions,
     FlatList,
     Image,
+    PanResponder,
 } from "react-native";
 import axios from "axios";
 import { useRoute } from "@react-navigation/native";
 import ImageZoom from "react-native-image-pan-zoom";
 
 const windowWidth = Dimensions.get("window").width;
+const scrollAreaWidth = 100; // Width of the transparent scroll area
 
+// Helper function to limit concurrent image size requests
 async function getSizes(url) {
     return new Promise((resolve, reject) => {
         Image.getSize(
             url,
-            (width, height) => {
-                resolve({ width, height });
-            },
-            (error) => {
-                reject(error);
-            }
+            (width, height) => resolve({ width, height }),
+            (error) => reject(error)
         );
     });
 }
@@ -34,6 +33,7 @@ const ChapterScreen = () => {
 
     const [pages, setPages] = useState([]);
     const [loading, setLoading] = useState(true);
+    const flatListRef = useRef(null); // Reference to FlatList
 
     useEffect(() => {
         const fetchChapterPages = async () => {
@@ -45,10 +45,25 @@ const ChapterScreen = () => {
                 const baseUrl = response.data.baseUrl;
                 const chapterData = response.data.chapter;
 
-                const imageUrls = chapterData.data.map((fileName) => ({
-                    url: `${baseUrl}/data/${chapterData.hash}/${fileName}`,
-                }));
+                // Limit the number of concurrent requests
+                const limitConcurrentRequests = async (urls, limit = 5) => {
+                    const results = [];
+                    for (let i = 0; i < urls.length; i += limit) {
+                        const batch = urls.slice(i, i + limit).map(async (fileName) => {
+                            const url = `${baseUrl}/data/${chapterData.hash}/${fileName}`;
+                            try {
+                                const size = await getSizes(url);
+                                return { url, width: size.width, height: size.height };
+                            } catch {
+                                return { url, width: windowWidth, height: windowWidth };
+                            }
+                        });
+                        results.push(...(await Promise.all(batch)));
+                    }
+                    return results;
+                };
 
+                const imageUrls = await limitConcurrentRequests(chapterData.data);
                 setPages(imageUrls);
             } catch (error) {
                 console.error("Error fetching chapter pages:", error);
@@ -60,41 +75,60 @@ const ChapterScreen = () => {
         fetchChapterPages();
     }, [chapterId]);
 
-    const renderItem = ({ item }) => {
-        // Pobierz wymiary obrazu i oblicz wysokość bez używania hooków
-        let imageSize = { width: windowWidth, height: windowWidth }; // Domyślna wartość na wypadek błędu
+    const renderItem = useCallback(
+        ({ item }) => {
+            if (!item.width || !item.height || item.height === 0) {
+                console.error("Invalid image dimensions:", item.width, item.height);
+                return null;
+            }
 
-        getSizes(item.url)
-            .then((size) => {
-                const aspectRatio = size.width / size.height;
-                const calculatedHeight = windowWidth / aspectRatio;
-                imageSize = { width: windowWidth, height: calculatedHeight };
-            })
-            .catch((error) => {
-                console.error("Error getting image size:", error);
-            });
+            const aspectRatio = item.width / item.height;
+            const calculatedHeight = windowWidth / aspectRatio;
 
-        let aspectRatio = imageSize.height / imageSize.width
+            return (
+                <View style={styles.pageContainer}>
+                    <ImageZoom
+                        cropWidth={windowWidth}
+                        cropHeight={calculatedHeight}
+                        imageWidth={windowWidth}
+                        imageHeight={calculatedHeight}
+                    >
+                        <Image
+                            source={{ uri: item.url }}
+                            style={{ width: windowWidth, height: calculatedHeight }}
+                            resizeMethod="scale"
+                            resizeMode="contain"
+                        />
+                    </ImageZoom>
+                    <View style={styles.scrollArea} />
+                </View>
+            );
+        },
+        [windowWidth]
+    );
 
+    const keyExtractor = useCallback((item, index) => index.toString(), []);
 
-        return (
-            <View style={[styles.pageContainer]}>
-                <ImageZoom
-                    imageWidth={Dimensions.get("window").width}
-                    imageHeight={Dimensions.get("window").height * aspectRatio}
-                    cropWidth={Dimensions.get("window").width}
-                    cropHeight={Dimensions.get("window").height}
-                >
-                    <Image
-                        source={{ uri: item.url }}
-                        style={{ width: "100%", height: "100%" }}
-                        resizeMethod="scale"
-                        resizeMode="contain"
-                    />
-                </ImageZoom>
-            </View>
-        );
-    };
+    // PanResponder to handle scroll gestures
+    const panResponder = useRef(
+        PanResponder.create({
+            onMoveShouldSetPanResponder: () => true,
+            onPanResponderMove: (evt, gestureState) => {
+                const { moveY } = gestureState;
+                if (flatListRef.current) {
+                    // Calculate the index to scroll to based on the touch position
+                    const totalHeight = pages.reduce((sum, item) => {
+                        const aspectRatio = item.width / item.height;
+                        const calculatedHeight = windowWidth / aspectRatio;
+                        return sum + calculatedHeight;
+                    }, 0);
+
+                    const position = (moveY / Dimensions.get('window').height) * totalHeight;
+                    flatListRef.current.scrollToOffset({ offset: position, animated: false });
+                }
+            },
+        })
+    ).current;
 
     if (loading) {
         return (
@@ -107,14 +141,18 @@ const ChapterScreen = () => {
     return (
         <View style={styles.container}>
             <FlatList
+                ref={flatListRef}
                 data={pages}
                 renderItem={renderItem}
-                keyExtractor={(item, index) => index.toString()}
+                keyExtractor={keyExtractor}
                 showsVerticalScrollIndicator={false}
                 initialNumToRender={5}
-                maxToRenderPerBatch={4}
+                maxToRenderPerBatch={5}
                 windowSize={7}
+                removeClippedSubviews={true}
+                bounces={false} // Disable bouncing effect
             />
+
         </View>
     );
 };
@@ -122,13 +160,23 @@ const ChapterScreen = () => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#1c1d22",
+        flex: 1,
+        position: 'relative', // Relative position for child elements
     },
     loadingContainer: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#1c1d22",
-    }
+    },
+    scrollArea: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        width: scrollAreaWidth,
+        height: '100%',
+        backgroundColor: 'rgba(255, 255, 255, 0)', // Transparent background
+    },
 });
 
 export default ChapterScreen;
