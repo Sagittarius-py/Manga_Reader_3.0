@@ -6,11 +6,10 @@ import {
 	ActivityIndicator,
 	Image,
 	TouchableOpacity,
-		FlatList
+	FlatList,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeContext } from "../../context/ThemeContext";
-import MasonryList from "react-native-masonry-list";
 
 const SavedImagesScreen = ({ navigation }) => {
 	const { currentTheme } = useContext(ThemeContext);
@@ -20,9 +19,8 @@ const SavedImagesScreen = ({ navigation }) => {
 
 	const styles = StyleSheet.create({
 		container: {
-			flexGrow: 1,
-			padding: 16,
-			flexDirection: "row",
+			flex: 1,
+			backgroundColor: currentTheme.background,
 		},
 		loaderContainer: {
 			flex: 1,
@@ -36,19 +34,25 @@ const SavedImagesScreen = ({ navigation }) => {
 		},
 		errorText: {
 			fontSize: 16,
+			color: currentTheme.text,
 		},
 		noImagesText: {
 			fontSize: 18,
+			color: currentTheme.text,
 			textAlign: "center",
+			marginTop: 20,
 		},
 		image: {
-			width: 100,
-			height: 300,
+			width: "100%",
+			aspectRatio: 2 / 3, // Keep the aspect ratio consistent
 			borderRadius: 8,
-			marginBottom: 8,
+		},
+		imageWrapper: {
+			flex: 1,
+			padding: 8,
 		},
 		list: {
-			backgroundColor: currentTheme.background, // Set background based on theme
+			paddingHorizontal: 8,
 		},
 	});
 
@@ -56,11 +60,9 @@ const SavedImagesScreen = ({ navigation }) => {
 		try {
 			const savedImagesData = await AsyncStorage.getItem("savedImages");
 			const imagesArray = savedImagesData ? JSON.parse(savedImagesData) : [];
-			console.log("Fetched images from AsyncStorage:", imagesArray); // Log the fetched data
 			setSavedImages(imagesArray);
 		} catch (error) {
 			setError("Failed to load saved images.");
-			console.error("Error fetching saved images:", error);
 		} finally {
 			setLoading(false);
 		}
@@ -72,7 +74,7 @@ const SavedImagesScreen = ({ navigation }) => {
 
 	if (loading) {
 		return (
-			<View style={[styles.loaderContainer, { backgroundColor: currentTheme.background }]}>
+			<View style={styles.loaderContainer}>
 				<ActivityIndicator size="large" color="#0000ff" />
 			</View>
 		);
@@ -80,32 +82,32 @@ const SavedImagesScreen = ({ navigation }) => {
 
 	if (error) {
 		return (
-			<View style={[styles.errorContainer, { backgroundColor: currentTheme.background }]}>
-				<Text style={[styles.errorText, { color: currentTheme.text }]}>{error}</Text>
+			<View style={styles.errorContainer}>
+				<Text style={styles.errorText}>{error}</Text>
 			</View>
 		);
 	}
 
-	const renderItem = ({ item }) => {
-		console.log("Rendering item:", item); // Log the item being rendered
-		return (
-			<TouchableOpacity
-				onPress={() => navigation.navigate("PictureDetails", { image: item })}
-			>
-				<Image source={{ uri: item }} style={styles.image} />
-			</TouchableOpacity>
-		);
-	};
+	const renderItem = ({ item }) => (
+		<TouchableOpacity
+			style={styles.imageWrapper}
+			onPress={() => navigation.navigate("PictureDetails", { image: item })}
+		>
+			<Image source={{ uri: item.uri }} style={styles.image} />
+		</TouchableOpacity>
+	);
 
 	return (
-		<View style={[styles.container, { backgroundColor: currentTheme.background }]}>
+		<View style={styles.container}>
 			{savedImages.length === 0 ? (
-				<Text style={[styles.noImagesText, { color: currentTheme.text }]}>No saved images found.</Text>
+				<Text style={styles.noImagesText}>No saved images found.</Text>
 			) : (
 				<FlatList
 					style={styles.list}
 					data={savedImages}
-					renderItem={renderItem} // Pass renderItem directly
+					renderItem={renderItem}
+					keyExtractor={(item, index) => index.toString()}
+					contentContainerStyle={{ paddingBottom: 16 }}
 				/>
 			)}
 		</View>

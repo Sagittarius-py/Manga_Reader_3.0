@@ -50,7 +50,8 @@ const FavoritesScreen = () => {
 			shadowRadius: 1,
 		},
 		coverImage: {
-
+            width: 100,
+            height: 150,
 			borderRadius: 5, // Optional: Rounded corners for the image
 		},
 		detailsContainer: {
