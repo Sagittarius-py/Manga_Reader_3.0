@@ -22,6 +22,7 @@ import FavoritesScreen from "./components/Manga/FavoritesScreen";
 import ExploreScreen from "./components/Manga/ExploreScreen";
 import PicturesScreen from "./components/Pics/PicturesScreen";
 import PictureDetailsScreen from "./components/Pics/PictureDetailsScreen";
+import SavedImagesScreen from "./components/Pics/SavedImagesScreen";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 
 // Create stack and drawer navigators
@@ -38,9 +39,7 @@ const CustomDrawerContent = (props) => {
 	return (
 		<DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1 }}>
 			{/* Manga Section */}
-			<Text style={[styles.sectionTitle, { color: currentTheme.text }]}>
-				Manga
-			</Text>
+			<Text style={[styles.sectionTitle, { color: currentTheme.text }]}>Manga</Text>
 			<View style={{ flex: 1 }}>
 				<DrawerItem
 					label="Home"
@@ -52,9 +51,7 @@ const CustomDrawerContent = (props) => {
 							color={isFocused("Home") ? colors.accent : currentTheme.text2}
 						/>
 					)}
-					style={
-						isFocused("Home") ? { backgroundColor: colors.accent + "20" } : null
-					} // Background when focused
+					style={isFocused("Home") ? { backgroundColor: colors.accent + "20" } : null} // Background when focused
 					onPress={() => props.navigation.navigate("Home")}
 				/>
 				<DrawerItem
@@ -67,11 +64,7 @@ const CustomDrawerContent = (props) => {
 							color={isFocused("Explore") ? colors.accent : currentTheme.text2}
 						/>
 					)}
-					style={
-						isFocused("Explore")
-							? { backgroundColor: colors.accent + "20" }
-							: null
-					} // Background when focused
+					style={isFocused("Explore") ? { backgroundColor: colors.accent + "20" } : null} // Background when focused
 					onPress={() => props.navigation.navigate("Explore")}
 				/>
 				<DrawerItem
@@ -84,9 +77,7 @@ const CustomDrawerContent = (props) => {
 							color={isFocused("Favs") ? colors.accent : currentTheme.text2}
 						/>
 					)}
-					style={
-						isFocused("Favs") ? { backgroundColor: colors.accent + "20" } : null
-					} // Background when focused
+					style={isFocused("Favs") ? { backgroundColor: colors.accent + "20" } : null} // Background when focused
 					onPress={() => props.navigation.navigate("Favs")}
 				/>
 			</View>
@@ -95,9 +86,7 @@ const CustomDrawerContent = (props) => {
 			<View style={styles.divider} />
 
 			{/* Pictures Section */}
-			<Text style={[styles.sectionTitle, { color: currentTheme.text }]}>
-				Pictures
-			</Text>
+			<Text style={[styles.sectionTitle, { color: currentTheme.text }]}>Pictures</Text>
 			<View style={{ flex: 1 }}>
 				<DrawerItem
 					label="Gallery"
@@ -109,39 +98,28 @@ const CustomDrawerContent = (props) => {
 							color={isFocused("Pictures") ? colors.accent : currentTheme.text2}
 						/>
 					)}
-					style={
-						isFocused("Pictures")
-							? { backgroundColor: colors.accent + "20" }
-							: null
-					} // Background when focused
+					style={isFocused("Pictures") ? { backgroundColor: colors.accent + "20" } : null} // Background when focused
 					onPress={() => props.navigation.navigate("Pictures")}
 				/>
-
 				<DrawerItem
-					label="Picture Details"
+					label="Saved Images"
 					labelStyle={{ color: currentTheme.text }}
 					icon={({ size }) => (
 						<Icon
-							name={isFocused("PictureDetails") ? "image" : "image-outline"}
+							name={isFocused("SavedImages") ? "image" : "image-outline"}
 							size={size}
-							color={
-								isFocused("PictureDetails") ? colors.accent : currentTheme.text2
-							}
+							color={isFocused("SavedImages") ? colors.accent : currentTheme.text2}
 						/>
 					)}
-					style={
-						isFocused("PictureDetails")
-							? { backgroundColor: colors.accent + "20" }
-							: null
-					} // Background when focused
-					onPress={() => props.navigation.navigate("PictureDetails")}
+					style={isFocused("SavedImages") ? { backgroundColor: colors.accent + "20" } : null} // Background when focused
+					onPress={() => props.navigation.navigate("SavedImages")}
 				/>
 			</View>
 
 			{/* Bottom part for Settings */}
 			<View style={{ borderTopWidth: 1, borderTopColor: currentTheme.text }}>
 				<DrawerItem
-					label=""
+					label="Settings"  // Add a label for settings
 					labelStyle={{ color: currentTheme.text }}
 					icon={({ size }) => (
 						<Icon
@@ -150,11 +128,7 @@ const CustomDrawerContent = (props) => {
 							color={isFocused("Settings") ? colors.accent : currentTheme.text}
 						/>
 					)}
-					style={
-						isFocused("Settings")
-							? { backgroundColor: colors.accent + "20" }
-							: null
-					} // Background when focused
+					style={isFocused("Settings") ? { backgroundColor: colors.accent + "20" } : null} // Background when focused
 					onPress={() => props.navigation.navigate("Settings")}
 				/>
 			</View>
@@ -229,6 +203,7 @@ const StackNavigator = () => {
 			<Stack.Screen name="Explore" component={ExploreScreen} />
 			<Stack.Screen name="Pictures" component={PicturesScreen} />
 			<Stack.Screen name="PictureDetails" component={PictureDetailsScreen} />
+			<Stack.Screen name="SavedImages" component={SavedImagesScreen} />
 		</Stack.Navigator>
 	);
 };

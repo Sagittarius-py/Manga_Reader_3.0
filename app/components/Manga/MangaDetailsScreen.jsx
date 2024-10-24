@@ -35,131 +35,138 @@ const MangaDetailsScreen = () => {
 	const [readChapters, setReadChapters] = useState([]); // To store read chapters
 
 	const styles = StyleSheet.create({
-		container: {
-			backgroundColor: currentTheme.background,
-			padding: 10,
-		},
-		coverImage: {
-			width: "100%",
-			height: 600,
-			resizeMode: "cover",
-		},
-		detailsContainer: {
-			padding: 10,
-		},
-		title: {
-			fontSize: 24,
-			fontWeight: "bold",
-			marginVertical: 10,
-			color: currentTheme.text,
-		},
-		description: {
-			fontSize: 16,
-			color: currentTheme.text,
-		},
-		year: {
-			fontSize: 14,
-			color: currentTheme.text2,
-			marginVertical: 5,
-		},
-		status: {
-			fontSize: 16,
-			color: currentTheme.text2,
-			marginVertical: 5,
-		},
-		chaptersTitle: {
-			fontSize: 18,
-			color: currentTheme.text,
-			marginBottom: 10,
-		},
-		chapterItem: {
-			padding: 10,
-			borderBottomWidth: 1,
-			borderBottomColor: "#ccc",
-		},
-		chapterTitle: {
-			color: currentTheme.text,
-			fontSize: 16,
-		},
-		chapterTitleRead: {
-			color: currentTheme.text2,
-			fontSize: 14,
-			fontStyle: "italic",
-		},
-		chapterDate: {
-			fontSize: 12,
-			color: currentTheme.text2,
-		},
-		favoriteButton: {
-			padding: 10,
-			backgroundColor: colors.accent,
-			alignItems: "center",
-			marginVertical: 10,
-			borderRadius: 5,
-		},
-		favoriteButtonText: {
-			color: "#fff",
-			fontSize: 16,
-			fontWeight: "bold",
-		},
-		loadMoreButton: {
-			padding: 10,
-			backgroundColor: colors.accent,
-			alignItems: "center",
-			marginVertical: 10,
-			borderRadius: 5,
-		},
-		loadMoreText: {
-			color: "#fff",
-			fontSize: 16,
-		},
-		navGroup: {
-			marginVertical: 10,
-			flexDirection: "row",
-			justifyContent: "space-evenly",
-			alignItems: "center",
-		},
-		navButton: {
-			height: 40,
-			backgroundColor: colors.accent,
-			padding: 4,
-			paddingHorizontal: 8,
-			borderRadius: 4,
-			flexDirection: "row",
-			justifyContent: "center",
-			alignItems: "center",
-		},
-		navButtonText: {
-			fontSize: 16,
-			color: currentTheme.text,
-		},
-		navPage: {
-			backgroundColor: currentTheme.bars,
-			fontSize: 20,
-			color: currentTheme.text,
-			padding: 4,
-			paddingHorizontal: 14,
-			borderRadius: 4,
-		},
-		lastReadContainer: {
-			marginVertical: 10,
-			alignItems: "center",
-		},
-		lastReadText: {
-			fontSize: 16,
-			color: currentTheme.text,
-		},
-		continueButton: {
-			marginTop: 10,
-			padding: 10,
-			backgroundColor: colors.accent,
-			borderRadius: 5,
-		},
-		continueButtonText: {
-			color: "#fff",
-			fontSize: 16,
-		},
-	});
+    	container: {
+    		backgroundColor: currentTheme.background,
+    		paddingHorizontal: 16,
+    		paddingTop: 16,
+    	},
+    	coverImage: {
+    		width: "100%",
+    		height: 600,
+    		borderRadius: 10,
+    		marginBottom: 16,
+    	},
+    	detailsContainer: {
+    		paddingHorizontal: 16,
+    	},
+    	title: {
+    		fontSize: 28,
+    		fontWeight: "bold",
+    		marginVertical: 10,
+    		color: currentTheme.text,
+    	},
+    	description: {
+    		fontSize: 16,
+    		lineHeight: 24,
+    		color: currentTheme.text,
+    		marginBottom: 8,
+    	},
+    	year: {
+    		fontSize: 14,
+    		color: currentTheme.text2,
+    		marginBottom: 4,
+    	},
+    	status: {
+    		fontSize: 14,
+    		color: currentTheme.text2,
+    		marginBottom: 16,
+    	},
+    	chaptersTitle: {
+    		fontSize: 22,
+    		fontWeight: "600",
+    		color: currentTheme.text,
+    		marginBottom: 10,
+    	},
+    	chapterItem: {
+    		backgroundColor: currentTheme.bars,
+    		padding: 12,
+    		marginVertical: 6,
+    		borderRadius: 10,
+    		shadowColor: "#000",
+    		shadowOffset: { width: 0, height: 2 },
+    		shadowOpacity: 0.3,
+    		shadowRadius: 5,
+    		elevation: 4,
+    	},
+    	chapterTitle: {
+    		color: currentTheme.text,
+    		fontSize: 16,
+    		fontWeight: "600",
+    	},
+    	chapterTitleRead: {
+    		color: currentTheme.text2,
+    		fontSize: 14,
+    		fontStyle: "italic",
+    	},
+    	chapterDate: {
+    		fontSize: 12,
+    		color: currentTheme.text2,
+    		marginTop: 4,
+    	},
+    	favoriteButton: {
+    		padding: 12,
+    		backgroundColor: colors.accent,
+    		alignItems: "center",
+    		borderRadius: 5,
+    		marginBottom: 16,
+    	},
+    	favoriteButtonText: {
+    		color: "#fff",
+    		fontSize: 16,
+    		fontWeight: "600",
+    	},
+    	navGroup: {
+    		marginTop: 20,
+    		flexDirection: "row",
+    		justifyContent: "space-between",
+    		alignItems: "center",
+    		paddingHorizontal: 16,
+    	},
+    	navButton: {
+    		height: 40,
+    		backgroundColor: colors.accent,
+    		paddingHorizontal: 16,
+    		borderRadius: 5,
+    		justifyContent: "center",
+    		alignItems: "center",
+    	},
+    	navButtonText: {
+    		fontSize: 16,
+    		color: "#fff",
+    		fontWeight: "600",
+    	},
+    	navPage: {
+    		fontSize: 18,
+    		color: currentTheme.text,
+    	},
+    	lastReadContainer: {
+    		marginVertical: 16,
+    		alignItems: "center",
+    		backgroundColor: currentTheme.bars,
+    		padding: 16,
+    		borderRadius: 10,
+    		shadowColor: "#000",
+    		shadowOffset: { width: 0, height: 2 },
+    		shadowOpacity: 0.3,
+    		shadowRadius: 5,
+    		elevation: 4,
+    	},
+    	lastReadText: {
+    		fontSize: 16,
+    		color: currentTheme.text,
+    		marginBottom: 8,
+    	},
+    	continueButton: {
+    		padding: 12,
+    		backgroundColor: colors.accent,
+    		borderRadius: 5,
+    	},
+    	continueButtonText: {
+    		color: "#fff",
+    		fontSize: 16,
+    		fontWeight: "600",
+    	},
+    });
 
 	const scrollToTop = () => {
 		scrollRef.current.scrollToOffset({ animated: true, offset: 0 });
@@ -326,45 +333,45 @@ const MangaDetailsScreen = () => {
 	};
 
 	const ListHeaderComponent = () => (
-		<View style={styles.detailsContainer}>
-			<Image source={{ uri: coverArtUri }} style={styles.coverImage} />
-			<Text style={styles.title}>{manga.attributes.title.en}</Text>
-			<Text style={styles.description}>{manga.attributes.description.en}</Text>
+    	<View style={styles.detailsContainer}>
+    		<Image source={{ uri: coverArtUri }} style={styles.coverImage} />
+    		<Text style={styles.title}>{manga.attributes.title.en}</Text>
+    		<Text style={styles.description}>{manga.attributes.description.en}</Text>
 
-			<Text style={styles.year}>Year: {manga.attributes.year}</Text>
-			<Text style={styles.status}>
-				Status:{" "}
-				{manga.attributes.status.charAt(0).toUpperCase() +
-					manga.attributes.status.slice(1)}
-			</Text>
-			<TouchableOpacity onPress={toggleFavorite} style={styles.favoriteButton}>
-				<Text style={styles.favoriteButtonText}>
-					{isFav ? "Remove from Favorites" : "Add to Favorites"}
-				</Text>
-			</TouchableOpacity>
-			<Text style={styles.chaptersTitle}>Chapters:</Text>
+    		<Text style={styles.year}>Year: {manga.attributes.year}</Text>
+    		<Text style={styles.status}>
+    			Status:{" "}
+    			{manga.attributes.status.charAt(0).toUpperCase() +
+    				manga.attributes.status.slice(1)}
+    		</Text>
+    		<TouchableOpacity onPress={toggleFavorite} style={styles.favoriteButton}>
+    			<Text style={styles.favoriteButtonText}>
+    				{isFav ? "Remove from Favorites" : "Add to Favorites"}
+    			</Text>
+    		</TouchableOpacity>
+    		<Text style={styles.chaptersTitle}>Chapters:</Text>
 
-			{/* Display last read chapter with a "Continue" button */}
-			{lastReadChapter && (
-				<View style={styles.lastReadContainer}>
-					<Text style={styles.lastReadText}>
-						Last Read: Chapter {lastReadChapter.attributes.chapter}{" "}
-						{lastReadChapter.attributes.title || ""}
-					</Text>
-					<TouchableOpacity
-						style={styles.continueButton}
-						onPress={() => {
-							navigation.navigate("ChapterScreen", {
-								chapter: lastReadChapter,
-							});
-						}}
-					>
-						<Text style={styles.continueButtonText}>Continue Reading</Text>
-					</TouchableOpacity>
-				</View>
-			)}
-		</View>
-	);
+    		{/* Display last read chapter with a "Continue" button */}
+    		{lastReadChapter && (
+    			<View style={styles.lastReadContainer}>
+    				<Text style={styles.lastReadText}>
+    					Last Read: Chapter {lastReadChapter.attributes.chapter}{" "}
+    					{lastReadChapter.attributes.title || ""}
+    				</Text>
+    				<TouchableOpacity
+    					style={styles.continueButton}
+    					onPress={() => {
+    						navigation.navigate("ChapterScreen", {
+    							chapter: lastReadChapter,
+    						});
+    					}}
+    				>
+    					<Text style={styles.continueButtonText}>Continue Reading</Text>
+    				</TouchableOpacity>
+    			</View>
+    		)}
+    	</View>
+    );
 
 	const renderFooter = () => (
 		<View style={styles.navGroup}>

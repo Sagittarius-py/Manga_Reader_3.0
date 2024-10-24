@@ -10,7 +10,7 @@ import MasonryList from "react-native-masonry-list"; // Masonry list for Pintere
 import axios from "axios";
 import { ThemeContext } from "../../context/ThemeContext";
 
-const PicturesScreen = () => {
+const PicturesScreen = ({ navigation }) => {
 	const { currentTheme } = useContext(ThemeContext);
 	const [pictures, setPictures] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -21,7 +21,7 @@ const PicturesScreen = () => {
 	// Fetch images from Neko API
 	const fetchPictures = async (pageNumber) => {
 		let limit = 20;
-		console.log(pageNumber);
+
 		try {
 			const response = await axios.get(
 				`https://api.nekosapi.com/v3/images?limit=${limit}&offset=${
@@ -74,7 +74,7 @@ const PicturesScreen = () => {
 	};
 
 	const styles = StyleSheet.create({
-		containera: {
+		container: {
 			flex: 1,
 			backgroundColor: currentTheme.background, // Set background based on theme
 		},
@@ -125,13 +125,13 @@ const PicturesScreen = () => {
 	}
 
 	return (
-		<View style={styles.containera}>
+		<View style={styles.container}>
 			<MasonryList
 				style={styles.list}
 				images={pictures}
 				onPressImage={(item, index) => {
 					// Handle image click, if needed
-					console.log("Image clicked:", item, index);
+					navigation.navigate("PictureDetails", { image: item })
 				}}
 				columns={2} // Number of columns for the Pinterest-like layout
 				imageContainerStyle={styles.imageContainer}

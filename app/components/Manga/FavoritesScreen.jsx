@@ -42,15 +42,21 @@ const FavoritesScreen = () => {
 			marginBottom: 15,
 			backgroundColor: currentTheme.cardBackground,
 			borderRadius: 5,
-			overflowX: "hidden",
+			overflow: "hidden", // Corrected from overflowX to overflow
+			elevation: 2, // Adds shadow on Android
+			shadowColor: "#000", // iOS shadow
+			shadowOffset: { width: 0, height: 1 },
+			shadowOpacity: 0.2,
+			shadowRadius: 1,
 		},
 		coverImage: {
-			width: 100,
-			height: 150,
+
+			borderRadius: 5, // Optional: Rounded corners for the image
 		},
 		detailsContainer: {
 			flex: 1,
 			padding: 10,
+			justifyContent: "center", // Center content vertically
 		},
 		title: {
 			fontSize: 18,
