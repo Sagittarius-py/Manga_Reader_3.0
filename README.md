@@ -1,50 +1,56 @@
-# Welcome to your Expo app 👋
+# Manga Reading App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Overview
 
-## Get started
+The **Manga Reading App** is a user-friendly application designed to offer an immersive manga reading experience on Android devices. This open-source project allows users to easily browse, search, and read their favorite manga directly from their mobile devices. The app is developed using React Native and leverages the Expo framework for cross-platform compatibility.
 
-1. Install dependencies
+## Features
 
-   ```bash
-   npm install
-   ```
+- **Comprehensive Manga Library**: Browse a wide selection of manga titles across various genres.
+- **Search Functionality**: Quickly find specific manga titles or explore new ones using the search feature.
+- **Bookmarking**: Save your favorite manga and keep track of your reading progress.
+- **User-Friendly Interface**: Enjoy a clean, intuitive interface designed for a seamless reading experience.
+- **Cross-Platform Compatibility**: The app is built with React Native, making it compatible with both Android and iOS (currently only available as an APK for Android).
 
-2. Start the app
+## Installation
 
-   ```bash
-    npx expo start
-   ```
+### Prerequisites
 
-In the output, you'll find options to open the app in a
+- Android device or emulator.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Download APK
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+You can download the latest Android APK from the following link:
 
-## Get a fresh project
+[Download Manga Reading App APK](https://expo.dev/accounts/sieniu2791/projects/manga-reader-30/builds/b986b8e0-785b-4ae0-a435-d450acb35a87)
 
-When you're ready, run:
+### Installation Steps
 
-```bash
-npm run reset-project
-```
+1. Download the APK file from the link above to your Android device.
+2. Open the downloaded file to begin the installation.
+3. Follow the on-screen instructions to complete the installation.
+4. Once installed, open the app and start exploring your favorite manga!
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Contributing
 
-## Learn more
+Contributions are welcome! If you have any ideas, suggestions, or bug reports, please open an issue or submit a pull request.
 
-To learn more about developing your project with Expo, look at the following resources:
+### Steps to Contribute
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Make your changes and commit them (`git commit -m 'Add some feature'`).
+4. Push to the branch (`git push origin feature-branch`).
+5. Open a pull request and describe your changes.
 
-## Join the community
+## License
 
-Join our community of developers creating universal apps.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Contact
+
+If you have any questions or feedback, feel free to reach out to the project maintainers through the repository's issue tracker.
+
+---
+
+Thank you for using the Manga Reading App! Happy reading! 📚
