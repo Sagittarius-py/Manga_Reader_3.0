@@ -13,6 +13,7 @@ import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { ThemeContext } from "../../context/ThemeContext";
 import Icon from "react-native-vector-icons/Ionicons";
+import MangaFragment from "../Fragments/MangaFragment"
 
 const MangaListScreen = () => {
 	const { colors, currentTheme } = useContext(ThemeContext);
@@ -137,46 +138,6 @@ const MangaListScreen = () => {
 		});
 	}, []);
 
-	const renderItemHorizontal = ({ item }) => {
-		const coverArt = item.relationships.find((r) => r.type === "cover_art");
-		const coverArtUri = coverArt
-			? `https://uploads.mangadex.org/covers/${item.id}/${coverArt.attributes.fileName}`
-			: "https://via.placeholder.com/150x200?text=No+Image";
-
-		return (
-			<TouchableOpacity
-				onPress={() => navigation.navigate("MangaDetails", { manga: item })}
-				style={styles.itemContainer}
-			>
-				<Image source={{ uri: coverArtUri }} style={styles.coverImage} />
-				<View style={styles.textContainer}>
-					<Text numberOfLines={1} style={styles.title}>
-						{item.attributes.title.en}
-					</Text>
-				</View>
-			</TouchableOpacity>
-		);
-	};
-
-	const renderItemVertical = ({ item }) => {
-		const coverArt = item.relationships.find((r) => r.type === "cover_art");
-		const coverArtUri = coverArt
-			? `https://uploads.mangadex.org/covers/${item.id}/${coverArt.attributes.fileName}`
-			: "https://via.placeholder.com/150x200?text=No+Image";
-
-		return (
-			<TouchableOpacity
-				onPress={() => navigation.navigate("MangaDetails", { manga: item })}
-				style={styles.itemContainer2}
-			>
-				<Image source={{ uri: coverArtUri }} style={styles.coverImage2} />
-				<View style={styles.textContainer}>
-					<Text style={styles.title2}>{item.attributes.title.en}</Text>
-				</View>
-			</TouchableOpacity>
-		);
-	};
-
 	return (
 		<ScrollView style={styles.container}>
 			<View style={styles.cont}>
@@ -187,7 +148,7 @@ const MangaListScreen = () => {
 
 			<FlatList
 				data={mangaListPopular}
-				renderItem={renderItemHorizontal}
+				renderItem={({ item }) => <MangaFragment item={item} navigation={navigation} />}
 				keyExtractor={(item) => item.id}
 				horizontal
 				showsHorizontalScrollIndicator={true}
@@ -210,7 +171,7 @@ const MangaListScreen = () => {
 				<FlatList
 					data={mangaListNew}
 					horizontal
-					renderItem={renderItemHorizontal}
+					renderItem={({ item }) => <MangaFragment item={item} navigation={navigation} />}
 					keyExtractor={(item) => item.id}
 					contentContainerStyle={{ paddingHorizontal: 10 }}
 				/>
@@ -226,7 +187,7 @@ const MangaListScreen = () => {
 				<FlatList
 					data={mangaListNewChapter}
 					horizontal
-					renderItem={renderItemHorizontal}
+					renderItem={({ item }) => <MangaFragment item={item} navigation={navigation} />}
 					keyExtractor={(item) => item.id}
 					contentContainerStyle={{ paddingHorizontal: 10 }}
 				/>

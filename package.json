@@ -41,6 +41,8 @@
     "react-native-image-pan-zoom": "^2.1.12",
     "react-native-image-viewing": "^0.2.2",
     "react-native-image-zoom-viewer": "^3.0.1",
+    "react-native-linear-gradient": "^2.8.3",
+    "react-native-link": "^4.1.0",
     "react-native-masonry-list": "^2.16.2",
     "react-native-pan-pinch-view": "^2.0.0",
     "react-native-pinch-zoom-view": "^0.2.0",

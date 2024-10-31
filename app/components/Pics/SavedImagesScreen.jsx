@@ -44,7 +44,7 @@ const SavedImagesScreen = ({ navigation }) => {
 		},
 		image: {
 			width: "100%",
-			aspectRatio: 2 / 3, // Keep the aspect ratio consistent
+			aspectRatio: 2 / 3,
 			borderRadius: 8,
 		},
 		imageWrapper: {

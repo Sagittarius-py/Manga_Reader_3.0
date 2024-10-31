@@ -15,6 +15,7 @@ import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { ThemeContext } from "../../context/ThemeContext";
 import Icon from "react-native-vector-icons/Ionicons";
+import MangaFragment from "../Fragments/MangaFragment"
 
 const ExploreScreen = ({ navigation }) => {
 	const { theme, colors, currentTheme, adultContentEnabled } =
@@ -274,30 +275,6 @@ const ExploreScreen = ({ navigation }) => {
 		if (offset - limit >= 0) setOffset((prevOffset) => prevOffset - limit);
 	};
 
-	const renderMangaItem = ({ item }) => {
-		// Fetch cover image URL
-		const coverArt = item.relationships.find((rel) => rel.type === "cover_art");
-		const coverArtUri = coverArt
-			? `https://uploads.mangadex.org/covers/${item.id}/${coverArt.attributes.fileName}`
-			: null;
-
-		return (
-			<TouchableOpacity
-				onPress={() => navigation.navigate("MangaDetails", { manga: item })}
-				style={styles.itemContainer}
-			>
-				{coverArtUri && (
-					<Image source={{ uri: coverArtUri }} style={styles.coverImage} />
-				)}
-				<View style={styles.textContainer}>
-					<Text numberOfLines={1} style={styles.title}>
-						{item.attributes.title.en || item.attributes.title["ja-ro"]}
-					</Text>
-				</View>
-			</TouchableOpacity>
-		);
-	};
-
 	return (
 		<View style={styles.container}>
 			<StatusBar barStyle="dark-content" style={styles.button} />
@@ -374,7 +351,7 @@ const ExploreScreen = ({ navigation }) => {
 
 					<FlatList
 						data={mangaList}
-						renderItem={renderMangaItem}
+						renderItem={({ item }) => <MangaFragment item={item} navigation={navigation} />}
 						keyExtractor={(item) => item.id}
 						numColumns={3} // Change here to use three columns
 						onEndReachedThreshold={0.5}
