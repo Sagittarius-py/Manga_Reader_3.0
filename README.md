@@ -43,14 +43,5 @@ Contributions are welcome! If you have any ideas, suggestions, or bug reports, p
 4. Push to the branch (`git push origin feature-branch`).
 5. Open a pull request and describe your changes.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contact
-
-If you have any questions or feedback, feel free to reach out to the project maintainers through the repository's issue tracker.
-
----
 
 Thank you for using the Manga Reading App! Happy reading! 📚
